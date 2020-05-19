@@ -16,4 +16,6 @@ Want to help create language packs? If you know a language that is not created y
 
 # Helper: OmarKatifu
 
+# Author: PinguinDev
 
+**NOTE: This Plugin is for the Software Pocketmine 
