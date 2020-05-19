@@ -1,0 +1,39 @@
+language: php
+php:
+ - 7.2
+sudo: false
+
+before_script:
+ # - pecl install channel://pecl.php.net/pthreads-3.1.6
+ - echo | pecl install channel://pecl.php.net/yaml-2.0.4
+ - pecl install channel://pecl.php.net/crypto-0.3.1
+ - git clone https://github.com/pmmp/pthreads.git
+ - cd pthreads
+ - git checkout 6ca019c58b4fa09ee2ff490f2444e34bef0773d0
+ - phpize
+ - ./configure
+ - make
+ - make install
+ - cd ..
+ - echo "extension=pthreads.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+ - mkdir "$TRAVIS_BUILD_DIR"/../PocketMine && cd "$TRAVIS_BUILD_DIR"/../PocketMine
+ - wget -O PocketMine-MP.phar "${1:-"https://jenkins.pmmp.io/job/PocketMine-MP/Stable/artifact/PocketMine-MP.phar"}"
+ - mkdir plugins && wget -O plugins/PluginChecker.phar https://github.com/jasonwynn10/MyPlot/releases/download/v0.0.0/PluginChecker_v1.0.2.phar
+ - mkdir unstaged
+ - wget -O - https://poggit.pmmp.io/res/travisPluginTest.php | php -- unstaged
+
+script:
+ - wget -O - https://github.com/jasonwynn10/MyPlot/releases/download/v0.0.0/travisScript.sh | bash -s - MyPlot MyPlot
+ - cd "$TRAVIS_BUILD_DIR"/../PocketMine/
+ - sed -i 's/world/Plots/' server.properties
+ - "if [ -f ${TRAVIS_BUILD_DIR}/../PocketMine/unstaged/MyPlot.phar ] ; then wget -O - https://github.com/jasonwynn10/MyPlot/releases/download/1.1.9/travisScript.sh | bash -s - MyPlot MyPlot ; else true ; fi"
+
+deploy:
+ provider: releases
+ api_key: $GITHUB_TOKEN
+ file_glob: true
+ file: $TRAVIS_BUILD_DIR/../PocketMine/unstaged/MyPlot.phar
+ skip_cleanup: true
+ draft: true
+ on:
+  tags: true
