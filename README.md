@@ -13,7 +13,7 @@ A list of commands and permissions can be found in the [MyPlot Wiki](https://git
 
 Want to help create language packs? If you know a language that is not created yet, you can create a new language pack by opening a pull request! If the language you know is already created, you can help improve it by editing it. Many of the current resource packs are outdated anyway :P
 
-# This is a Pocketmine Merge Plugin with my Version from MyPlot
+# This is my Pocketmine Merge Plugin with my Version from MyPlot
 
 # Helper: OmarKatifu
 
